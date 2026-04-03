@@ -1,0 +1,11 @@
+# Telegram Bot
+python-telegram-bot>=21.0
+
+# Todoist API
+todoist-api-python>=2.1.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Nemlig unofficial API client (nemlig_api/client.py vendored from nemlig-shopper)
+httpx>=0.28.0

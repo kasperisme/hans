@@ -1,0 +1,22 @@
+[Unit]
+Description=Hans Telegram Bot - Home Automation Assistant
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/hans
+ExecStart=/home/pi/hans/.venv/bin/python bot.py
+Restart=always
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/pi/hans
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

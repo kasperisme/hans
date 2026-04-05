@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "swingtrader": {
+      "command": "/Users/kasperisme/projects/swingtrader/.venv/bin/python",
+      "args": ["-m", "swingtrader_mcp.server"],
+      "cwd": "/Users/kasperisme/projects/swingtrader",
+      "env": {
+        "PYTHONPATH": "/Users/kasperisme/projects/swingtrader"
+      }
+    },
+    "hans": {
+      "command": "/Users/kasperisme/projects/hans/.venv/bin/python",
+      "args": ["-m", "router.mcp_server"],
+      "cwd": "/Users/kasperisme/projects/hans"
+    }
+  }
+}

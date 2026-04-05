@@ -1,11 +1,17 @@
-# Telegram Bot
-python-telegram-bot>=21.0
-
-# Todoist API
-todoist-api-python>=2.1.0
-
 # Environment variables
 python-dotenv>=1.0.0
 
-# Nemlig unofficial API client (nemlig_api/client.py vendored from nemlig-shopper)
+# HTTP client (Ollama timeouts)
 httpx>=0.28.0
+
+# Ollama tool calling router
+ollama>=0.4.0
+
+# MCP server (router/mcp_server.py — Hans as Claude Code sub-agent)
+mcp>=1.0.0
+
+# Swingtrader DuckDB reads (skills/query_swingtrader_db.py)
+duckdb>=1.0.0
+
+# Todoist API
+todoist-api-python>=2.1.0

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# ask — CLI wrapper for the Hans tiered router
+# Claude Code calls this via Bash as: ask "your task"
+#
+# Usage:
+#   ask "your task"
+#   ask --tier local "your task"
+#   ask --tier api "your task"
+#   ask --no-think "your task"   # sets OLLAMA_THINK=false for this run (only when HANS_TIER1_BACKEND=ollama)
+#   ask --think false|true|low|medium|high "task"
+#   ask --stats
+
+# Resolve symlinks so this works when installed as ~/bin/ask -> router/ask
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+VENV_PYTHON="$PROJECT_DIR/.venv/bin/python"
+
+# Fall back to system python if venv not set up yet
+if [ ! -x "$VENV_PYTHON" ]; then
+  VENV_PYTHON="python3"
+fi
+
+exec "$VENV_PYTHON" "$SCRIPT_DIR/router.py" "$@"

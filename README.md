@@ -1,43 +1,26 @@
-# Hans - Home Automation Assistant
+# Hans
 
-A Raspberry Pi-based home automation hub using Claude Code as the agent orchestration layer. Manages a shared grocery list via Todoist and automates ordering on nemlig.com through a Telegram bot interface.
+Swing-trading assistant repo: tiered **`ask`** router, Ollama, Claude Code, and SwingTrader-related **skills**. See **CLAUDE.md** for the full picture.
 
 ## Features
 
-- **Telegram Bot Interface** - Control via `/order`, `/list`, `/status` commands
-- **Todoist Integration** - Shared "Indkøb" shopping list between users
-- **Automated Ordering** - Claude computer use for nemlig.com
-- **Claude Code Orchestration** - AI-powered task execution
-- **Auto-deployment** - GitHub webhook triggers automatic updates
-
-## Architecture
-
-```
-┌─────────────────┐     ┌─────────────────┐
-│   Telegram      │────▶│  Raspberry Pi   │
-│   (User Input)  │◀────│  (Ubuntu)       │
-└─────────────────┘     └────────┬────────┘
-                                 │
-                    ┌────────────┼────────────┐
-                    ▼            ▼            ▼
-             ┌──────────┐ ┌──────────┐ ┌──────────┐
-             │ Claude   │ │ Todoist  │ │ nemlig   │
-             │ API      │ │ API      │ │ (Browser)│
-             └──────────┘ └──────────┘ └──────────┘
-```
+- **Tiered routing** — `router/ask` → local Ollama / Claude Code, optional Anthropic API (`--tier api`)
+- **Skills** — IBD screener wrappers, DuckDB reads, optional Todoist helper (`skills/read_todoist.py`)
+- **Telegram (optional)** — official Claude Code plugin: `deploy/claude-telegram.sh`
+- **Deploy** — Mac/Pi scripts under `deploy/`
 
 ## Quick Start
 
-### 1. Clone and Configure
+### 1. Clone and configure
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/hans.git
 cd hans
 cp .env.example .env
-# Edit .env with your credentials
+# Edit .env — see CLAUDE.md
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
 ```bash
 python3 -m venv .venv
@@ -45,101 +28,51 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Run the Bot
+### 3. Telegram (optional)
+
+See **CLAUDE.md** — Telegram.
 
 ```bash
-python bot.py
+bash deploy/claude-telegram.sh
 ```
 
-## Raspberry Pi Setup
-
-Run the automated setup script on your Pi:
+## Raspberry Pi
 
 ```bash
 bash deploy/setup-pi.sh
 ```
 
-This will:
-- Install Python 3.11 and Chromium
-- Set up the virtual environment
-- Install systemd services
-- Configure auto-start on boot
-
-### Service Management
+### Service management
 
 ```bash
-# Start the bot
-sudo systemctl start hans-bot
-
-# Check status
-sudo systemctl status hans-bot
-
-# View logs
-journalctl -u hans-bot -f
-
-# Restart after config changes
-sudo systemctl restart hans-bot
+sudo systemctl start hans-claude-telegram
+sudo systemctl status hans-claude-telegram
+journalctl -u hans-claude-telegram -f
 ```
 
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `/start` | Show welcome message and available commands |
-| `/order` | Read Todoist list and order items on nemlig.com |
-| `/list` | Display current shopping list |
-| `/status` | Check system health |
-
-## Project Structure
+## Project structure
 
 ```
 hans/
-├── bot.py                 # Telegram bot daemon
-├── CLAUDE.md              # Instructions for Claude Code
-├── requirements.txt       # Python dependencies
-├── .env.example           # Environment template
-├── skills/
-│   ├── read_todoist.py    # Fetch shopping list
-│   ├── order_nemlig.py    # Prepare order for Claude browser control
-│   └── confirm_order.py   # Format order summary
-└── deploy/
-    ├── setup-pi.sh        # Pi setup script
-    ├── hans-bot.service   # Bot systemd service
-    ├── hans-webhook.service # Webhook systemd service
-    └── update-hook.py     # GitHub webhook listener
+├── router/            # ask CLI + tiered routing
+├── skills/            # Trading scripts (screener, DuckDB, etc.)
+├── deploy/            # claude-telegram.sh, setup-*.sh, systemd units
+├── CLAUDE.md          # Main documentation
+└── requirements.txt
 ```
 
-## Environment Variables
+## Environment variables
 
-| Variable | Description |
-|----------|-------------|
-| `CLAUDE_API_KEY` | Anthropic API key |
-| `TODOIST_API_TOKEN` | Todoist REST API token |
-| `NEMLIG_EMAIL` | nemlig.com login email |
-| `NEMLIG_PASSWORD` | nemlig.com login password |
-| `TELEGRAM_BOT_TOKEN` | Telegram Bot API token |
-| `TELEGRAM_ALLOWED_USER_IDS` | Comma-separated whitelisted user IDs |
+See **CLAUDE.md** — Environment Variables. Common entries: `ANTHROPIC_API_KEY` (API tier), `APIKEY` / `SWINGTRADER_ROOT` (screener), `LOCAL_MODEL`, optional `TODOIST_API_TOKEN` for `skills/read_todoist.py`.
 
-## Auto-Deployment
+## Auto-deployment (Pi)
 
-The Pi can automatically pull updates when you push to GitHub:
-
-1. Set up the webhook service:
-   ```bash
-   sudo systemctl enable hans-webhook
-   sudo systemctl start hans-webhook
-   ```
-
-2. Configure a GitHub webhook pointing to `http://YOUR_PI_IP:9000`
-
-3. Push changes to trigger automatic deployment
+Webhook listener can pull and restart services — see `deploy/update-hook.py` and `deploy/hans-webhook.service`.
 
 ## Security
 
-- API keys stored in `.env` (git-ignored)
-- SSH: Key-based auth only
-- Telegram: Whitelisted user IDs only
-- Pi runs on local network (not exposed to internet)
+- Keep secrets in `.env` (git-ignored)
+- Telegram: use the official plugin’s access controls (CLAUDE.md)
 
 ## License
 

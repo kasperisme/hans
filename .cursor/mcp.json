@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "swingtrader": {
+      "command": "${workspaceFolder}/../swingtrader/.venv/bin/python",
+      "args": ["-m", "swingtrader_mcp.server"],
+      "cwd": "${workspaceFolder}/../swingtrader"
+    }
+  }
+}

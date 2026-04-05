@@ -1,0 +1,38 @@
+---
+description: SwingTrader MCP is available in Cursor — use it for DuckDB and screener data
+alwaysApply: true
+---
+
+# SwingTrader MCP (this workspace)
+
+## You can use it
+
+The **swingtrader** MCP server is registered in `.cursor/mcp.json`. When this project is open in Cursor and MCP is enabled, **SwingTrader tools appear in your tool list** (names may be prefixed, e.g. `mcp_*` / server-qualified — use whatever Cursor exposes).
+
+For **DuckDB scan history, latest results, per-symbol rows, or running screener scripts**, **call those MCP tools first** instead of inventing paths, grepping `output/`, or reading files under a guessed `swingtrader` tree.
+
+Typical capabilities (exact names follow the running server):
+
+- Resolve DB path / environment
+- List recent scan runs and fetch run detail
+- Query normalized scan rows (`trend_template`, `rs_rating`, etc.)
+- Latest screener JSON from the database
+- Run JSON screener or IBD market screener (heavy) when the user asks
+
+See `CLAUDE.md` → **SwingTrader MCP (Cursor)** for the tool table.
+
+## What does *not* have MCP
+
+- **`ask`** / **`router/router.py`** — Tier 1 defaults to **Claude Code CLI** (`claude -p`) with **Ollama :11434**; Cursor stdio MCP is still separate. With **`HANS_TIER1_BACKEND=ollama`**, Tier 1 is direct Ollama HTTP only. `router/ollama_context.py` adjusts the system text per backend.
+- **Telegram** (`deploy/claude-telegram.sh`) — same as **`ask`**: no Cursor MCP.
+
+If the user asks via **`ask`** or Telegram, they **cannot** reach SwingTrader MCP. Tell them to use **Cursor chat** in this repo with MCP on, or **Claude Code** launched against **Ollama :11434** (`deploy/claude-code-ollama.sh` — see [Ollama + Claude Code](https://docs.ollama.com/integrations/claude-code)), or **`skills/`** as in `CLAUDE.md`.
+
+The **Hans proxy (5001)** is not the same as the official Ollama↔Claude Code integration; for MCP inside Claude Code with a local model, use **11434**, not 5001.
+
+## If tools seem “unreachable”
+
+1. **MCP disabled or server failed:** Cursor **Settings → MCP** — confirm **swingtrader** is on and shows no error.
+2. **Layout:** Config expects a **sibling** repo: `hans/../swingtrader` with `swingtrader_mcp` installed in that project’s `.venv` (see `.cursor/mcp.json`).
+3. **Restart Cursor** after editing `.cursor/mcp.json`.
+4. **Wrong folder open:** Open the **`hans`** folder as the workspace root so `${workspaceFolder}/../swingtrader` resolves correctly.

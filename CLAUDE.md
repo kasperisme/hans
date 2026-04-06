@@ -133,7 +133,7 @@ ask --stats
 
 ### SwingTrader MCP (Cursor)
 
-Project config: `.cursor/mcp.json` registers the `swingtrader` server (stdio) with `cwd` = sibling `../swingtrader`. Restart Cursor after changing MCP config.
+Project config: `.cursor/mcp.json` registers the `swingtrader` server (stdio) with `cwd` = `../swingtrader/code/analytics`. Restart Cursor after changing MCP config.
 
 **Agent workflow:** For anything involving latest scans, history, or per-symbol rows, call MCP tools first:
 
@@ -151,7 +151,7 @@ Project config: `.cursor/mcp.json` registers the `swingtrader` server (stdio) wi
 
 Do **not** bypass MCP for data that already lives in DuckDB unless debugging.
 
-If `../swingtrader/.venv/bin/python` is missing, edit `.cursor/mcp.json` to use `python3` and ensure `mcp` + `duckdb` are installed in that environment.
+If `../swingtrader/code/analytics/.venv/bin/python` is missing, edit `.cursor/mcp.json` to use `python3` and ensure `mcp` + `duckdb` are installed in that environment.
 
 ## Environment Variables
 

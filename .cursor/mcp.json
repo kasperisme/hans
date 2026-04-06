@@ -1,9 +1,9 @@
 {
   "mcpServers": {
     "swingtrader": {
-      "command": "${workspaceFolder}/../swingtrader/.venv/bin/python",
+      "command": "${workspaceFolder}/../swingtrader/code/analytics/.venv/bin/python",
       "args": ["-m", "swingtrader_mcp.server"],
-      "cwd": "${workspaceFolder}/../swingtrader"
+      "cwd": "${workspaceFolder}/../swingtrader/code/analytics"
     },
     "fmp": {
       "url": "https://financialmodelingprep.com/mcp?apikey=7434d5c21dcb00aac3db4ba2e19ed2a5"
